@@ -60,11 +60,8 @@ public class InterfaceWindowController implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
         lab.add(new Label("YAHOOOOOOOOO"));   
-        VBox vbButtons = new VBox();
-        vbButtons.setSpacing(10);
-        vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
-        vbButtons.getChildren().add(new Button("asa"));
-            Pane1.getChildren().add(vbButtons);
+        Button b = new Button("Hello");
+            Pane1.getChildren().add(b);
         ArrayList<PcapIf> alldevs = getDevices();
         for (int i = 0; i < alldevs.size(); i++) {
             alldevs.get(i).getName();
