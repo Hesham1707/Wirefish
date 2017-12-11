@@ -10,20 +10,21 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
-public class InterfaceWindowController  {
+public class InterfaceWindowController implements Initializable {
     @FXML
-    private ListView L; 
+    private Pane Pane1;
     @FXML
-    private ArrayList<Label> lab=new ArrayList<Label>();
-    @FXML
-    URL url;
-    @FXML
-    ResourceBundle rb;
+    private ArrayList<Label> lab;
    
     public ArrayList<PcapIf> getDevices() {
         ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
@@ -57,16 +58,18 @@ public class InterfaceWindowController  {
         return alldevs;
     }
 
-    public void initialize() {
-        lab.add(new Label("YAHOOOOOOOOO"));
-         lab.add(new Label("YAHOOOOOOOOO"));
-          lab.add(new Label("YAHOOOOOOOOO"));
-          
-//        ArrayList<PcapIf> alldevs = getDevices();
-//        for (int i = 0; i < alldevs.size(); i++) {
-//            alldevs.get(i).getName();
-//            
-//        }
+    public void initialize(URL url, ResourceBundle rb) {
+        lab.add(new Label("YAHOOOOOOOOO"));   
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
+        vbButtons.getChildren().add(new Button("asa"));
+            Pane1.getChildren().add(vbButtons);
+        ArrayList<PcapIf> alldevs = getDevices();
+        for (int i = 0; i < alldevs.size(); i++) {
+            alldevs.get(i).getName();
+            
+        }
     }
 
 }

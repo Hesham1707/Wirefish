@@ -26,18 +26,20 @@ import org.jnetpcap.*;
 public class Wirefish extends Application {
     private static InterfaceWindowController wc=new InterfaceWindowController();
         @Override
-    public void start(Stage stage) throws Exception {
-       Parent root = FXMLLoader.load(getClass().getResource("fxml_example.fxml"));
-        Scene scene = new Scene(root, 300, 275);
-        stage.setTitle("FXML Welcome");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("InterfaceWindow.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     
 
     public static void main(String[] args) {
-        wc.initialize();
+        launch(args); 
+        
+       
     }
     
 }
