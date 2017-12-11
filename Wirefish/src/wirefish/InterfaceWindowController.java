@@ -52,8 +52,7 @@ public class InterfaceWindowController implements Initializable {
         }
 
         PcapIf device = alldevs.get(0); // We know we have atleast 1 device  
-        System.out
-                .printf("\nChoosing '%s' on your behalf:\n",
+        System.out.printf("\nChoosing '%s' on your behalf:\n",
                         (device.getDescription() != null) ? device.getDescription()
                         : device.getName());
         return alldevs;
