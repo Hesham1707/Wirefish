@@ -5,9 +5,11 @@
  */
 package wirefish;
 
+import java.awt.Panel;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -24,7 +26,6 @@ public class InterfaceWindowController implements Initializable {
     @FXML
     private Pane Pane1;
     @FXML
-    private ArrayList<Label> lab;
    
     public ArrayList<PcapIf> getDevices() {
         ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
@@ -57,11 +58,20 @@ public class InterfaceWindowController implements Initializable {
                         : device.getName());
         return alldevs;
     }
-
+    
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+        System.out.println("You clicked me!");
+        Pane1.setVisible(false);
+    }
+    
     public void initialize(URL url, ResourceBundle rb) {
-        lab.add(new Label("YAHOOOOOOOOO"));   
+        
+//        lab.add(new Label("YAHOOOOOOOOO"));   
         Button b = new Button("Hello");
-            Pane1.getChildren().add(b);
+       
+        Pane1.getChildren().add(b);
+        
         ArrayList<PcapIf> alldevs = getDevices();
         for (int i = 0; i < alldevs.size(); i++) {
             alldevs.get(i).getName();
