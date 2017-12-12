@@ -5,8 +5,14 @@
  */
 package wirefish;
 
+import java.util.Arrays;
+import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
+import static org.jnetpcap.protocol.JProtocol.IP4;
+import static org.jnetpcap.protocol.lan.Ethernet.EthernetType.IP4;
+import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
+
 
 /**
  *
@@ -15,23 +21,27 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 public class PacketP {
 
     PcapPacket packet;
-    String Protocol;
+    String Protocol="";
     int portNum;
+    String SourceIP="",destinationIP="";
 
     public PacketP(PcapPacket p) {
         this.packet = p;
-        Tcp t = new Tcp();
-        if (p.hasHeader(t)) {
-            portNum=t.source();
-            if (t.source() == 80) {
-                Protocol = "Http";
-            }
+        Tcp tcp = new Tcp();
+        Ip4 ip = new Ip4();
+        if (packet.hasHeader(ip) == false) {
+            return;
         }
+        if (packet.hasHeader(tcp) == false) {
+            return;
+        }
+        this.SourceIP= Arrays.toString(ip.source());
+        this.destinationIP= Arrays.toString(ip.destination()); 
     }
 
     @Override
     public String toString() {
-        return "the Protocol: " + Protocol+" , Port Number : "+this.portNum;
+        return "the Protocol: " + Protocol + " , Port Number : " + this.portNum+" ,SourceIP:"+this.SourceIP+" ,DestinationIP:"+this.destinationIP;
     }
 
 }
