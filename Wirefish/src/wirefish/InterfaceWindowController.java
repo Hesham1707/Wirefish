@@ -85,7 +85,7 @@ public class InterfaceWindowController implements Initializable {
     private void handleButton1Action(ActionEvent event) {
         pcap.close();
         CaptureThread.stop();
-
+        System.out.println("CAPTURE STOPPED");
     }
 
     public void initialize(URL url, ResourceBundle rb) {
