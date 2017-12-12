@@ -27,8 +27,10 @@ import org.jnetpcap.PcapIf;
 public class InterfaceWindowController implements Initializable {
     @FXML
     private Pane Pane1;
-  
-    private ListView<String> LV=new ListView<>();
+     @FXML
+    private Button confirm;
+     @FXML
+     private ListView<String> LV;  
     
     private ArrayList<Label> lab= new ArrayList();
      ObservableList<String> items=FXCollections.observableArrayList ();
@@ -74,19 +76,12 @@ public class InterfaceWindowController implements Initializable {
   
         ArrayList<PcapIf> alldevs = getDevices();
         for (int i = 0; i < alldevs.size(); i++) {
-//            lab.add(new Label(alldevs.get(i).getDescription())); 
             items.add(alldevs.get(i).getDescription());
         }
+       
         LV.setItems(items);
-        Pane1.getChildren().add(LV);
-//        System.out.println(lab.size());
-//        int y=10;
-//        for (int i = 0; i < lab.size(); i++) {
-//             lab.get(i).setLayoutX(200);
-//             lab.get(i).setLayoutY(y);
-//            Pane1.getChildren().add( lab.get(i));
-//            y=y+50;
-//        }
+   
     }
+       
 
 }
