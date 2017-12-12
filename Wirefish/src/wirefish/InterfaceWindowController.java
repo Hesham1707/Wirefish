@@ -25,7 +25,7 @@ import org.jnetpcap.PcapIf;
 public class InterfaceWindowController implements Initializable {
     @FXML
     private Pane Pane1;
-    @FXML
+    
    
     public ArrayList<PcapIf> getDevices() {
         ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
