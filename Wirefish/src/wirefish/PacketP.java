@@ -12,6 +12,7 @@ import static org.jnetpcap.protocol.JProtocol.IP4;
 import static org.jnetpcap.protocol.lan.Ethernet.EthernetType.IP4;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
+import org.jnetpcap.protocol.tcpip.Udp;
 
 
 /**
@@ -21,27 +22,38 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 public class PacketP {
 
     PcapPacket packet;
-    String Protocol="";
-    int portNum;
+    String Protocol="",transport="";
     String SourceIP="",destinationIP="";
-
+    int portSource,PortDst;
+    Tcp tcp = new Tcp();
+    Ip4 ip = new Ip4();
+    Udp udp = new Udp();
+        
     public PacketP(PcapPacket p) {
         this.packet = p;
-        Tcp tcp = new Tcp();
-        Ip4 ip = new Ip4();
+        //get source ip and destination
         if (packet.hasHeader(ip) == false) {
-            return;
+            this.SourceIP= Arrays.toString(ip.source());
+            this.destinationIP= Arrays.toString(ip.destination()); 
         }
+        //know the transport is TCP and get source and destination port number
         if (packet.hasHeader(tcp) == false) {
-            return;
+            this.transport="TCP";  
+            this.portSource=tcp.source();
+            this.PortDst=tcp.destination();
+        }//know the transport is UDP and get source and destination port number
+        else if (packet.hasHeader(udp)){
+            this.transport="UDP";
+            this.portSource=udp.source();
+            this.PortDst=udp.destination();
         }
-        this.SourceIP= Arrays.toString(ip.source());
-        this.destinationIP= Arrays.toString(ip.destination()); 
+        
+
     }
 
     @Override
     public String toString() {
-        return "the Protocol: " + Protocol + " , Port Number : " + this.portNum+" ,SourceIP:"+this.SourceIP+" ,DestinationIP:"+this.destinationIP;
+        return "the Protocol: " + Protocol + " ,Source PortNumber: " + this.portSource+ " ,Destination PortNumber: " + this.PortDst+" ,SourceIP: "+this.SourceIP+" ,DestinationIP: "+this.destinationIP;
     }
 
 }
