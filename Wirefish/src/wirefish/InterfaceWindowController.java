@@ -26,7 +26,7 @@ public class InterfaceWindowController implements Initializable {
     @FXML
     private Pane Pane1;
     
-   
+    private ArrayList<Label> lab= new ArrayList();
     public ArrayList<PcapIf> getDevices() {
         ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
         StringBuilder errbuf = new StringBuilder(); // For any error msgs  
@@ -67,14 +67,17 @@ public class InterfaceWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
 //        lab.add(new Label("YAHOOOOOOOOO"));   
-        Button b = new Button("Hello");
-       
-        Pane1.getChildren().add(b);
-        
         ArrayList<PcapIf> alldevs = getDevices();
         for (int i = 0; i < alldevs.size(); i++) {
-            alldevs.get(i).getName();
-            
+            lab.add(new Label(alldevs.get(i).getDescription())); 
+        }
+        System.out.println(lab.size());
+        int y=10;
+        for (int i = 0; i < lab.size(); i++) {
+             lab.get(i).setLayoutX(10);
+             lab.get(i).setLayoutY(y);
+            Pane1.getChildren().add( lab.get(i));
+            y=y+50;
         }
     }
 
