@@ -24,14 +24,17 @@ import org.jnetpcap.*;
  * @author Hesham-Desktop
  */
 public class Wirefish extends Application {
+    public static Stage StageOpened;
+    public static Scene sc;
     private static InterfaceWindowController wc=new InterfaceWindowController();
         @Override
     public void start(Stage primaryStage) throws Exception {
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("InterfaceWindow.fxml"));
+        StageOpened=primaryStage;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("InterfaceWindow.fxml"));
         Parent root = loader.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        sc = new Scene(root);
+        StageOpened.setScene(sc);
+        StageOpened.show();
     }
 
     

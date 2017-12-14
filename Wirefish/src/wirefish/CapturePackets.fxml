@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane id="Pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="wirefish.CapturePacketsController">
+  <children>
+    <ListView id="LV" fx:id="CapList" layoutX="0.0" layoutY="23.0" prefHeight="145.0" prefWidth="600.0" />
+    <Label id="title" layoutX="0.0" layoutY="6.0" prefHeight="17.0" prefWidth="487.0" text="Title" textFill="#659df2" />
+    <Button id="stop" layoutX="548.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButton1Action" text="Stop" />
+    <Accordion layoutX="0.0" layoutY="168.0" prefHeight="122.0" prefWidth="600.0">
+      <expandedPane>
+        <TitledPane fx:id="x1" animated="false" expanded="true" text="untitled">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </TitledPane>
+      </expandedPane>
+      <panes>
+        <TitledPane animated="false" text="untitled">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </TitledPane>
+        <TitledPane animated="false" text="untitled">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="596.0" />
+          </content>
+        </TitledPane>
+        <fx:reference source="x1" />
+      </panes>
+    </Accordion>
+  </children>
+</Pane>
