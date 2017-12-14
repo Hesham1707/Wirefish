@@ -12,6 +12,7 @@ import static org.jnetpcap.protocol.JProtocol.IP4;
 import static org.jnetpcap.protocol.lan.Ethernet.EthernetType.IP4;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
+import org.jnetpcap.protocol.tcpip.Tcp.Timestamp;
 import org.jnetpcap.protocol.tcpip.Udp;
 
 
@@ -28,6 +29,7 @@ public class PacketP {
     Tcp tcp = new Tcp();
     Ip4 ip = new Ip4();
     Udp udp = new Udp();
+    long time;
         
     public PacketP(PcapPacket p) {
         this.packet = p;
@@ -47,6 +49,7 @@ public class PacketP {
             this.portSource=udp.source();
             this.PortDst=udp.destination();
         }
+        time = packet.getCaptureHeader().timestampInMillis();
         
 
     }
