@@ -30,6 +30,7 @@ public class PacketP {
     Ip4 ip = new Ip4();
     Udp udp = new Udp();
     long time;
+    int lengthCaptured;
     int length;
         
     public PacketP(PcapPacket p) {
@@ -51,8 +52,8 @@ public class PacketP {
             this.PortDst=udp.destination();
         }
         time = packet.getCaptureHeader().timestampInMillis();//time of capture packet
-        length=packet.getCaptureHeader().caplen();//acual length of packet
-       
+        lengthCaptured=packet.getCaptureHeader().caplen();//acual length of packet
+        length=packet.getCaptureHeader().wirelen();//length on wire
 
     }
 
