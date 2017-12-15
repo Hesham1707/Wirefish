@@ -38,28 +38,18 @@ public class InterfaceWindowController implements Initializable {
     @FXML
     private Button stop;
 
-    ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
+    public static ArrayList<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
     StringBuilder errbuf = new StringBuilder(); // For any error msgs  
     private ArrayList<Label> lab = new ArrayList();
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
     Thread CaptureThread;
+    public static int index;
 
     public ArrayList<PcapIf> getDevices() {
         int r = Pcap.findAllDevs(alldevs, errbuf);
         return alldevs;
     }
-
-    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-        public void nextPacket(PcapPacket packet, String user) {
-            System.out.printf("Received packet at %s caplen=%-4d len=%-4d %s\n",
-                    new Date(packet.getCaptureHeader().timestampInMillis()),
-                    packet.getCaptureHeader().caplen(), // Length actually captured  
-                    packet.getCaptureHeader().wirelen(), // Original length   
-                    user // User supplied object  
-            );
-        }
-    };
 
     public void selectDevice(String selected) {
         ArrayList<PcapIf> devices = getDevices();
@@ -69,15 +59,8 @@ public class InterfaceWindowController implements Initializable {
 
         for (int i = 0; i < devices.size(); i++) {
             if (devices.get(i).getDescription().equals(selected)) {
-                pcap = Pcap.openLive(devices.get(i).getName(), snaplen, flags, timeout, errbuf);
+                index=i;
                 System.out.println("SUCCESS OPENING" + devices.get(i).getDescription());
-
-                CaptureThread = new Thread() {
-                    public void run() {
-                        pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
-                    }
-                };
-                CaptureThread.start();
                 break;
             }
         }

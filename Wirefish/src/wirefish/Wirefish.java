@@ -30,6 +30,7 @@ public class Wirefish extends Application {
         @Override
     public void start(Stage primaryStage) throws Exception {
         StageOpened=primaryStage;
+        StageOpened.setTitle("WireFish");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InterfaceWindow.fxml"));
         Parent root = loader.load();
         sc = new Scene(root);
