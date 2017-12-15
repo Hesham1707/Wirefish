@@ -10,7 +10,7 @@
   <children>
     <ListView id="LV" fx:id="CapList" layoutX="0.0" layoutY="23.0" prefHeight="145.0" prefWidth="600.0" />
     <Label id="title" layoutX="0.0" layoutY="6.0" prefHeight="17.0" prefWidth="487.0" text="Title" textFill="#659df2" />
-    <Button id="stop" layoutX="548.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButton1Action" text="Stop" />
+    <Button id="stop" layoutX="548.0" layoutY="0.0" mnemonicParsing="false" text="Stop" />
     <Accordion layoutX="0.0" layoutY="168.0" prefHeight="122.0" prefWidth="600.0">
       <expandedPane>
         <TitledPane fx:id="x1" animated="false" expanded="true" text="untitled">

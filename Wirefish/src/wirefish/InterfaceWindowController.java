@@ -1,14 +1,20 @@
 package wirefish;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -17,6 +23,7 @@ import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
+import static wirefish.Wirefish.StageOpened;
 
 public class InterfaceWindowController implements Initializable {
 
@@ -78,7 +85,15 @@ public class InterfaceWindowController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        selectDevice(LV.getSelectionModel().getSelectedItem());
+        try {
+            selectDevice(LV.getSelectionModel().getSelectedItem());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CapturePackets.fxml"));
+            Parent root = loader.load();
+            Scene sc1 = new Scene(root);
+            StageOpened.setScene(sc1);  
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
