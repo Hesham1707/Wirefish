@@ -68,14 +68,16 @@ public class CapturePacketsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        int snaplen = 64 * 1024;           // Capture all packets, no trucation  
-        int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-        int timeout = 10 * 1000;           // 10 seconds in millis 
-        StringBuilder errbuf = new StringBuilder();
+        
 
-        pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
+        
         CaptureThread = new Thread() {
             public void run() {
+                int snaplen = 64 * 1024;           // Capture all packets, no trucation  
+                int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
+                int timeout = 10 * 1000;           // 10 seconds in millis 
+                StringBuilder errbuf = new StringBuilder();
+                pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
                 pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
 
             }
