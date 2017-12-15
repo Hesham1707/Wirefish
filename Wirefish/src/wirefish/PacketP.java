@@ -5,12 +5,13 @@
  */
 package wirefish;
 
+import static java.net.Proxy.Type.HTTP;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
-import static org.jnetpcap.protocol.JProtocol.IP4;
+import static org.jnetpcap.protocol.JProtocol.HTTP;
 import static org.jnetpcap.protocol.lan.Ethernet.EthernetType.IP4;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
@@ -45,17 +46,23 @@ public class PacketP {
             //know the transport is TCP and get source and destination port number
             if (packet.hasHeader(tcp)) {
                 this.transport = "TCP";
-                
+                if(tcp.source()==80){
+                     this.Protocol = "HTTP";
+                }
+                else
+                    this.Protocol = "TCP";
                 this.portSource = tcp.source();
                 this.PortDst = tcp.destination();
                 Inti();
             }//know the transport is UDP and get source and destination port number
             else if (packet.hasHeader(udp)) {
                 this.transport = "UDP";
+                this.Protocol = "UDP";
                 this.portSource = udp.source();
                 this.PortDst = udp.destination();
                 Inti();
             }
+                    
             
 
     }
@@ -65,7 +72,7 @@ public class PacketP {
             timestamp=new Timestamp(time);
             lengthCaptured = packet.getCaptureHeader().caplen();//acual length of packet
             length = packet.getCaptureHeader().wirelen();//length on wire
-            Header="Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Length: " + this.length;
+            Header="Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: "+this.Protocol+" ,Length: " + this.length;
     }
 
 }
