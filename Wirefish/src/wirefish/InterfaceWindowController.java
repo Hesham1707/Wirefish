@@ -42,8 +42,6 @@ public class InterfaceWindowController implements Initializable {
     StringBuilder errbuf = new StringBuilder(); // For any error msgs  
     private ArrayList<Label> lab = new ArrayList();
     ObservableList<String> items = FXCollections.observableArrayList();
-    Pcap pcap;
-    Thread CaptureThread;
     public static int index;
 
     public ArrayList<PcapIf> getDevices() {
@@ -81,8 +79,6 @@ public class InterfaceWindowController implements Initializable {
 
     @FXML
     private void handleButton1Action(ActionEvent event) {
-        pcap.close();
-        CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
 
