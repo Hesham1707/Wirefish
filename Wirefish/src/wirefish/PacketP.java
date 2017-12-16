@@ -14,6 +14,7 @@ import org.jnetpcap.packet.format.FormatUtils;
 
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
+import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import org.jnetpcap.protocol.tcpip.Udp;
 
@@ -31,8 +32,7 @@ public class PacketP {
     Ethernet eh = new Ethernet();
     Ip4 ip = new Ip4();
     Udp udp = new Udp();
-    
-//    HTTP http=new HTTP();
+    Http http=new Http();
     long time;
     Timestamp timestamp;
     int lengthCaptured;
@@ -65,7 +65,7 @@ public class PacketP {
                 this.PortDst = udp.destination();
                 
             }
-            if(this.portSource==80)
+            if(packet.hasHeader(http))
                 this.setProtocol("HTTP");
             this.Inti();
         }
