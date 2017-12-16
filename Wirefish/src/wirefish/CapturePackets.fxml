@@ -32,7 +32,7 @@
         </TitledPane>
       </panes>
     </Accordion>
-    <Label id="hexatext" fx:id="hexatext" alignment="TOP_CENTER" cacheHint="QUALITY" contentDisplay="TOP" layoutX="4.0" layoutY="248.0" prefHeight="153.0" prefWidth="593.0" textAlignment="CENTER" textFill="#9e8b8b">
+    <Label id="hexatext" fx:id="hexatext" alignment="TOP_LEFT" cacheHint="QUALITY" contentDisplay="TOP" layoutX="4.0" layoutY="248.0" prefHeight="153.0" prefWidth="593.0" textAlignment="CENTER" textFill="#9e8b8b">
          <font>
             <Font name="Segoe Script Bold" size="13.0" />
          </font></Label>
