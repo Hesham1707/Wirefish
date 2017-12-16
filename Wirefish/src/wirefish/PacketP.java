@@ -63,7 +63,6 @@ public class PacketP {
                 this.setProtocol("UDP");
                 this.portSource = udp.source();
                 this.PortDst = udp.destination();
-                
             }
             if(packet.hasHeader(http))
                 this.setProtocol("HTTP");
