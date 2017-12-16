@@ -5,13 +5,13 @@
  */
 package wirefish;
 
-import static com.sun.deploy.net.protocol.ProtocolType.HTTP;
-import static java.net.Proxy.Type.HTTP;
+
+
 import java.sql.Timestamp;
-import static javax.print.attribute.standard.ReferenceUriSchemesSupported.HTTP;
+
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
-import static org.jnetpcap.protocol.JProtocol.HTTP;
+
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
