@@ -65,16 +65,11 @@ public class CapturePacketsController implements Initializable {
         @Override
         public void nextPacket(PcapPacket packet, String user) {
             PacketP p = new PacketP(packet);
-
-            System.out.printf("Received packet at %s caplen=%-4d len=%-4d %s\n",
-                    new Date(packet.getCaptureHeader().timestampInMillis()),
-                    packet.getCaptureHeader().caplen(), // Length actually captured  
-                    packet.getCaptureHeader().wirelen(), // Original length   
-                    user // User supplied object  
-            );
-
             packets.add(p);
             String RT = p.Header;
+            System.out.printf(RT);
+
+            
             if (!RT.equals("")) {
                 items.add(RT);
                 CapList.setItems(items);
