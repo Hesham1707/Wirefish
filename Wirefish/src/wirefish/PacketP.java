@@ -5,14 +5,14 @@
  */
 package wirefish;
 
+import static com.sun.deploy.net.protocol.ProtocolType.HTTP;
 import static java.net.Proxy.Type.HTTP;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import org.jnetpcap.packet.JPacket;
+import static javax.print.attribute.standard.ReferenceUriSchemesSupported.HTTP;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import static org.jnetpcap.protocol.JProtocol.HTTP;
-import static org.jnetpcap.protocol.lan.Ethernet.EthernetType.IP4;
+import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import org.jnetpcap.protocol.tcpip.Udp;
@@ -24,55 +24,64 @@ import org.jnetpcap.protocol.tcpip.Udp;
 public class PacketP {
 
     PcapPacket packet;
-    String Protocol = "", transport = "";
+    String Protocol = "";
     String SourceIP = "", destinationIP = "";
     int portSource, PortDst;
     Tcp tcp = new Tcp();
+    Ethernet eh = new Ethernet();
     Ip4 ip = new Ip4();
     Udp udp = new Udp();
+    
+//    HTTP http=new HTTP();
     long time;
     Timestamp timestamp;
     int lengthCaptured;
     int length;
-    String Header="";
+    String Header = "";
 
     public PacketP(PcapPacket p) {
         this.packet = p;
         //get source ip and destination
-        if (packet.hasHeader(ip)) {
-            this.SourceIP = FormatUtils.ip(ip.source());
-            this.destinationIP = FormatUtils.ip(ip.destination());
-        }
-            //know the transport is TCP and get source and destination port number
+        
+        if (packet.hasHeader(eh)) {
+            this.setProtocol("Ethernet");  
+            this.SourceIP = FormatUtils.mac(eh.source());
+            this.destinationIP = FormatUtils.mac(eh.destination());
+            System.out.println("Source :"+this.SourceIP);
+            if (packet.hasHeader(ip)) {
+                this.setProtocol("IP4");
+                this.SourceIP = FormatUtils.ip(ip.source());
+                this.destinationIP = FormatUtils.ip(ip.destination());
+            }
             if (packet.hasHeader(tcp)) {
-                this.transport = "TCP";
-                if(tcp.source()==80){
-                     this.Protocol = "HTTP";
-                }
-                else
-                    this.Protocol = "TCP";
+                this.setProtocol("TCP");
                 this.portSource = tcp.source();
                 this.PortDst = tcp.destination();
                 Inti();
             }//know the transport is UDP and get source and destination port number
             else if (packet.hasHeader(udp)) {
-                this.transport = "UDP";
-                this.Protocol = "UDP";
+                this.setProtocol("UDP");
                 this.portSource = udp.source();
                 this.PortDst = udp.destination();
-                Inti();
+                
             }
-                    
-            
+            if(this.portSource==80)
+                this.setProtocol("HTTP");
+            this.Inti();
+        }
 
     }
-    
-    private void Inti(){
-            time = packet.getCaptureHeader().timestampInMillis();//time of capture packet
-            timestamp=new Timestamp(time);
-            lengthCaptured = packet.getCaptureHeader().caplen();//acual length of packet
-            length = packet.getCaptureHeader().wirelen();//length on wire
-            Header="Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: "+this.Protocol+" ,Length: " + this.length;
+
+    private void setProtocol(String protocol) {
+        this.Protocol = protocol;
+    }
+
+    private void Inti() {
+        time = packet.getCaptureHeader().timestampInMillis();//time of capture packet
+        timestamp = new Timestamp(time);
+        lengthCaptured = packet.getCaptureHeader().caplen();//acual length of packet
+        length = packet.getCaptureHeader().wirelen();//length on wire
+        Header = "Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
     }
 
 }
