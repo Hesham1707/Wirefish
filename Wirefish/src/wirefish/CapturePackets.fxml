@@ -9,32 +9,55 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane id="Pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wirefish.CapturePacketsController">
+<Pane id="Pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wirefish.CapturePacketsController">
   <children>
-    <ListView id="LV" fx:id="CapList" layoutX="0.0" layoutY="23.0" onMouseClicked="#run" prefHeight="145.0" prefWidth="600.0" />
-    <Button id="stop" layoutX="548.0" layoutY="0.0" mnemonicParsing="false" onAction="#handleStopAction" text="Stop" />
-    <Accordion layoutX="0.0" layoutY="168.0" prefHeight="122.0" prefWidth="600.0">
+    <ListView id="LV" fx:id="CapList" layoutX="0.0" layoutY="23.0" onMouseClicked="#run" prefHeight="145.0" prefWidth="700.0" />
+    <Button id="stop" layoutX="659.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleStopAction" text="Stop" />
+      <Pane prefHeight="200.0" prefWidth="200.0" />
+    <Accordion layoutY="223.0" prefHeight="375.0" prefWidth="700.0">
       <panes>
-        <TitledPane animated="false" text="untitled">
+        <TitledPane animated="false" prefHeight="250.0" prefWidth="600.0" text="Ethernet">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="EthTap" text="Null" />
+                     </children>
+                  </AnchorPane>
           </content>
         </TitledPane>
-        <TitledPane animated="false" text="untitled">
+        <TitledPane animated="false" text="IPv4">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="596.0" />
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="596.0">
+                     <children>
+                        <Label fx:id="IPv4Tap" text="Null" />
+                     </children>
+                  </AnchorPane>
           </content>
         </TitledPane>
-        <TitledPane animated="false" expanded="true" text="untitled" fx:id="x1">
+            <TitledPane animated="false" expanded="true" layoutX="50.0" layoutY="10.0" minHeight="-Infinity" prefHeight="264.0" prefWidth="612.0" text="HTTP">
+               <content>
+                  <AnchorPane prefHeight="250.0" prefWidth="550.0">
+                     <children>
+                        <Label fx:id="HttpTap" text="Null" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+        <TitledPane animated="false" expanded="true" text="TCP/UDP">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="143.0" prefWidth="598.0" />
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="550.0">
+                     <children>
+                        <Label fx:id="UDPTCPtap" text="Null" />
+                     </children>
+                  </AnchorPane>
           </content>
         </TitledPane>
       </panes>
     </Accordion>
-    <Label id="hexatext" fx:id="hexatext" alignment="TOP_LEFT" cacheHint="QUALITY" contentDisplay="TOP" layoutX="4.0" layoutY="248.0" prefHeight="153.0" prefWidth="593.0" textAlignment="CENTER" textFill="#9e8b8b">
+    <Label id="hexatext" fx:id="hexatext" alignment="TOP_CENTER" cacheHint="QUALITY" contentDisplay="TOP" layoutY="598.0" prefHeight="152.0" prefWidth="700.0" textAlignment="CENTER" textFill="#9e8b8b">
          <font>
             <Font name="Segoe Script Bold" size="13.0" />
-         </font></Label>
+         </font>
+      </Label>
   </children>
 </Pane>

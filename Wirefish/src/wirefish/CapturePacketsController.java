@@ -23,6 +23,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.PcapPacket;
@@ -42,6 +45,14 @@ public class CapturePacketsController implements Initializable {
     private ListView<String> CapList;
     @FXML
     private Label hexatext;
+    @FXML
+    private Label EthTap;
+    @FXML
+    private Label IPv4Tap;
+    @FXML
+    private Label UDPTCPtap;
+    @FXML
+    private Label HttpTap;
     
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
@@ -52,6 +63,12 @@ public class CapturePacketsController implements Initializable {
     private void run() {
             int id=CapList.getSelectionModel().getSelectedIndex();
             hexatext.setText(packets.get(id).packet.toHexdump().toString());
+            EthTap.setText(packets.get(id).EthDescription);
+            IPv4Tap.setText(packets.get(id).IpV4Description);
+            UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
+            HttpTap.setText(packets.get(id).HttpDescription);
+            
+            
     }
 
     @FXML

@@ -38,6 +38,12 @@ public class PacketP {
     int lengthCaptured;
     int length;
     String Header = "";
+    
+    // Hossam 
+    String EthDescription  = "No description found";
+    String TcpUdpDescription  = "No description found";
+    String HttpDescription  = "No description found";
+    String IpV4Description  = "No description found";
 
     public PacketP(PcapPacket p) {
         this.packet = p;
@@ -47,28 +53,34 @@ public class PacketP {
             this.setProtocol("Ethernet");  
             this.SourceIP = FormatUtils.mac(eh.source());
             this.destinationIP = FormatUtils.mac(eh.destination());
-            System.out.println("Source :"+this.SourceIP);
+            this.EthDescription = packet.getHeader(eh).toString();
             if (packet.hasHeader(ip)) {
                 this.setProtocol("IP4");
                 this.SourceIP = FormatUtils.ip(ip.source());
                 this.destinationIP = FormatUtils.ip(ip.destination());
+                this.IpV4Description = packet.getHeader(ip).toString();
             }
             if (packet.hasHeader(tcp)) {
                 this.setProtocol("TCP");
                 this.portSource = tcp.source();
                 this.PortDst = tcp.destination();
+                this.TcpUdpDescription = packet.getHeader(tcp).toString();
                 Inti();
             }//know the transport is UDP and get source and destination port number
             else if (packet.hasHeader(udp)) {
                 this.setProtocol("UDP");
+                //System.out.println(packet.getHeader(udp));
                 this.portSource = udp.source();
                 this.PortDst = udp.destination();
+                this.TcpUdpDescription = packet.getHeader(udp).toString();
             }
             if(packet.hasHeader(http))
                 this.setProtocol("HTTP");
+            
             this.Inti();
+           // this.TcpUdpDescription = packet.getHeader(http).toString();
         }
-
+          
     }
 
     private void setProtocol(String protocol) {
