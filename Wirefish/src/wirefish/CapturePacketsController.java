@@ -74,7 +74,7 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
-
+//asdasd
     public void LoadFile() {
         FileChooser filechooser = new FileChooser();
         File sFile = filechooser.showOpenDialog(null);
