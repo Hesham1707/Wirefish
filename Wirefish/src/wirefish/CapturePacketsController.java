@@ -78,7 +78,7 @@ public class CapturePacketsController implements Initializable {
         pcap.close();
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
-        Allpackets=new ArrayList(packets);
+        Allpackets = new ArrayList(packets);
     }
 
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
@@ -123,10 +123,10 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
-         packets = new ArrayList(Allpackets);
+        packets = new ArrayList(Allpackets);
         System.out.println("Packets Filtered");
         ObservableList<String> fitems = FXCollections.observableArrayList();
-        fitems=items;
+        fitems = items;
         String text = filter.getText();
         System.out.print(text);
         switch (text) {
@@ -147,17 +147,22 @@ public class CapturePacketsController implements Initializable {
             case "Ethernet":
                 fitems = filterProtocol("Ethernet");
                 break;
+            case "ipv4":
+            case "IPv4":
+            case "IP4":
+                fitems = filterProtocol("IP4");
+                break;
         }
-            CapList.getItems().clear();
-            CapList.setItems(fitems);
-       
+        CapList.getItems().clear();
+        CapList.setItems(fitems);
+
     }
 
     public ObservableList<String> filterProtocol(String protocol) {
-        Allpackets=new ArrayList(packets);
+        Allpackets = new ArrayList(packets);
         packets.clear();
         ObservableList<String> fitems = FXCollections.observableArrayList();
-        for (int i = 0; i <Allpackets.size(); i++) {
+        for (int i = 0; i < Allpackets.size(); i++) {
             System.out.print("asd");
             if (Allpackets.get(i).getProtocol().equals(protocol)) {
                 packets.add(Allpackets.get(i));
