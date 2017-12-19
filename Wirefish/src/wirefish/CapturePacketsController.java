@@ -90,7 +90,6 @@ public class CapturePacketsController implements Initializable {
             String RT = p.Header;
             System.out.printf(RT);
 
-            
             if (!RT.equals("")) {
                 items.add(RT);
                 CapList.setItems(items);
