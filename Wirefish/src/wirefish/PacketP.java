@@ -76,9 +76,10 @@ public class PacketP {
                 this.PortDst = udp.destination();
                 this.TcpUdpDescription = packet.getHeader(udp).toString();
             }
-            if(packet.hasHeader(http))
+            if(packet.hasHeader(http)){
+             this.HttpDescription = packet.getHeader(http).toString();
                 this.setProtocol("HTTP");
-            
+            }
             this.Inti();
            // this.TcpUdpDescription = packet.getHeader(http).toString();
         }
