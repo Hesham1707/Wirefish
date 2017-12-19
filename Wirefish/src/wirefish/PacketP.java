@@ -8,6 +8,7 @@ package wirefish;
 
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
@@ -100,5 +101,12 @@ public class PacketP {
         length = packet.getCaptureHeader().wirelen();//length on wire
         Header = "id: "+this.id+" ,Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
     }
-
+    
+    //to get the packet with any id you want, it return null if no packects with this id 
+    public static PacketP getPacketbyID(int id,ArrayList<PacketP> packets){
+        for(int i=0;i<packets.size();i++)
+            if(packets.get(i).id==id)
+                return packets.get(i);
+        return null;
+    }
 }
