@@ -1,6 +1,7 @@
 package wirefish;
 
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapDumper;
 import org.jnetpcap.PcapIf;
@@ -71,6 +73,38 @@ public class CapturePacketsController implements Initializable {
         pcap.close();
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
+    }
+
+    public void LoadFile() {
+        FileChooser filechooser = new FileChooser();
+        File sFile = filechooser.showOpenDialog(null);
+        String fileName = sFile.getAbsolutePath();
+        StringBuilder eBuffer = new StringBuilder();  
+             Pcap pcap = Pcap.openOffline(fileName,eBuffer);
+        PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
+
+            public void nextPacket(PcapPacket packet, String user) {
+                PacketP p = new PacketP(packet);
+                packets.add(p);
+                String RT = p.Header;
+                System.out.printf(RT);
+
+                if (!RT.equals("")) {
+                    items.add(RT);
+                    CapList.setItems(items);
+                }
+            }
+
+        };
+        
+         try {
+           pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
+        }
+        catch(Exception ex)
+        {
+            System.out.println("eof");
+        }
+
     }
 
     //load
