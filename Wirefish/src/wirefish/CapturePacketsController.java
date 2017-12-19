@@ -72,13 +72,13 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
-    String ofile = "tmp-capture-file.pcap";
-    
-    PcapDumper dumper = pcap.dumpOpen(ofile);
+//    String ofile = "tmp-capture-file.pcap";
+//    
+//    PcapDumper dumper = pcap.dumpOpen(ofile);
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
         @Override
         public void nextPacket(PcapPacket packet, String user) {
-            dumper.dump(packet.getCaptureHeader(),packet);
+            //dumper.dump(packet.getCaptureHeader(),packet);
             PacketP p = new PacketP(packet);
             packets.add(p);
             String RT = p.Header;
