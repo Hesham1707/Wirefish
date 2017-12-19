@@ -67,13 +67,12 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     private void run() {
-        int id = CapList.getSelectionModel().getSelectedIndex();
-        hexatext.setText(packets.get(id).packet.toHexdump().toString());
-        EthTap.setText(packets.get(id).EthDescription);
-        IPv4Tap.setText(packets.get(id).IpV4Description);
-        UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
-        HttpTap.setText(packets.get(id).HttpDescription);
-
+        int index = CapList.getSelectionModel().getSelectedIndex();
+        hexatext.setText(packets.get(index).packet.toHexdump().toString());
+        EthTap.setText(packets.get(index).EthDescription);
+        IPv4Tap.setText(packets.get(index).IpV4Description);
+        UDPTCPtap.setText(packets.get(index).TcpUdpDescription);
+        HttpTap.setText(packets.get(index).HttpDescription);
     }
 
     @FXML
