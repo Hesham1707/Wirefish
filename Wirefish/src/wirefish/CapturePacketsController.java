@@ -144,9 +144,7 @@ public class CapturePacketsController implements Initializable {
                 break;
         }
         CapList.getItems().clear();
-        CapList.refresh();
         CapList.setItems(fitems);
-        CapList.refresh();
 
     }
 
@@ -159,49 +157,6 @@ public class CapturePacketsController implements Initializable {
         }
         return fitems;
     }
-
-    //load
-//        StringBuilder offlineErrBuffer = new StringBuilder(); // For any error msgs
-//        //1-load offline fileS
-//        Pcap pcapp = Pcap.openOffline(fromOutsideFilename, offlineErrBuffer);
-//        //2-check if all OK
-//        if (pcapp == null) {
-//            System.err.printf("Error while opening device for capture: " + offlineErrBuffer.toString());
-//            return;
-//        }
-//        //3- Create Packet handler ( same for openLive Capturing )
-//
-//        PcapPacketHandler<String> packetsFromFileHandler = new PcapPacketHandler<String>() {
-//            public void nextPacket(PcapPacket packet, String user) {
-//                CaptureThread = new Thread() {
-//                    public void run() {
-//                        int snaplen = 64 * 1024;           // Capture all packets, no trucation  
-//                        int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-//                        int timeout = 10 * 1000;           // 10 seconds in millis 
-//                        StringBuilder errbuf = new StringBuilder();
-//                        pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
-//                        pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
-//
-//                    }
-//                };
-//                CaptureThread.start();
-//            }
-//        }
-//        );
-//        pcapp.loop (Pcap.LOOP_INFINITE, packetsFromFileHandler,"");
-//        public void save{
-//        String fileName = "packetsCaptured" + (Capturer.fileNum) + ".pcap";
-//        Capturer.fileNum++;
-//        PcapDumper dumper = this.pcap.dumpOpen(fileName);
-//        PcapPacketHandler<String> SavingPacketsHandler = new PcapPacketHandler<String>() {
-//            @Override
-//            public void nextPacket(PcapPacket packet, String user) {
-//                dumper.dump(packet.getCaptureHeader(), packet);
-//            }
-//        };
-//        pcap.loop(Capturer.packetsCounter, SavingPacketsHandler, "");
-//        dumper.close();
-//    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 

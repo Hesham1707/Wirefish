@@ -70,7 +70,7 @@
                     <MenuItem mnemonicParsing="false" text="Start" />
                         <MenuItem mnemonicParsing="false" onAction="#handleStopAction" text="Stop" />
                         <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" onAction="#LoadFile" text="Load" />
+                        <MenuItem mnemonicParsing="false" text="Load" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
