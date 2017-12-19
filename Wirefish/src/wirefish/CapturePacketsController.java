@@ -77,28 +77,30 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
+    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
 
+            @Override
+            public void nextPacket(PcapPacket packet, String user) {
+                try{
+                PacketP p = new PacketP(packet);
+                packets.add(p);
+                String RT = p.Header;
+                System.out.println(RT);
+                
+                if (!RT.equals("")) {
+                    items.add(RT);
+                    CapList.setItems(items);
+                }
+                }catch(Exception ex){}
+            }
+
+        };
     public void LoadFile() {
         FileChooser filechooser = new FileChooser();
         File sFile = filechooser.showOpenDialog(null);
         String fileName = sFile.getAbsolutePath();
         StringBuilder eBuffer = new StringBuilder();
         Pcap pcap = Pcap.openOffline(fileName, eBuffer);
-        PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-
-            public void nextPacket(PcapPacket packet, String user) {
-                PacketP p = new PacketP(packet);
-                packets.add(p);
-                String RT = p.Header;
-                System.out.printf(RT);
-
-                if (!RT.equals("")) {
-                    items.add(RT);
-                    CapList.setItems(items);
-                }
-            }
-
-        };
 
         try {
             pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
@@ -193,6 +195,7 @@ public class CapturePacketsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+
         CaptureThread = new Thread() {
             public void run() {
                 int snaplen = 64 * 1024;           // Capture all packets, no trucation  
@@ -200,25 +203,8 @@ public class CapturePacketsController implements Initializable {
                 int timeout = 10 * 1000;           // 10 seconds in millis 
                 StringBuilder errbuf = new StringBuilder();
                 pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
-                String ofile = "tmp-capture-file.pcap";
-//    
+                String ofile = "tmp-capture-file.pcap";    
                 PcapDumper dumper = pcap.dumpOpen(ofile);
-                PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-                    @Override
-                    public void nextPacket(PcapPacket packet, String user) {
-                        dumper.dump(packet.getCaptureHeader(), packet);
-                        PacketP p = new PacketP(packet);
-                        packets.add(p);
-                        String RT = p.Header;
-                        System.out.printf(RT);
-
-                        if (!RT.equals("")) {
-                            items.add(RT);
-                            CapList.setItems(items);
-                        }
-                    }
-
-                };
                 pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
 
             }
