@@ -60,6 +60,7 @@ public class CapturePacketsController implements Initializable {
     Pcap pcap;
     Thread CaptureThread;
     ArrayList<PacketP> packets = new ArrayList<PacketP>();
+    ArrayList<PacketP> Allpackets = new ArrayList<PacketP>();
 
     @FXML
     private void run() {
@@ -123,40 +124,49 @@ public class CapturePacketsController implements Initializable {
     public void handleFilter(ActionEvent e) {
         System.out.println("Packets Filtered");
         ObservableList<String> fitems = FXCollections.observableArrayList();
+        fitems=items;
         String text = filter.getText();
+        System.out.print(text);
         switch (text) {
             case "udp":
             case "UDP":
-                fitems = filterProtocol(packets, "UDP");
+                fitems = filterProtocol("UDP");
                 break;
             case "tcp":
             case "TCP":
-                fitems = filterProtocol(packets, "TCP");
+                fitems = filterProtocol("TCP");
                 break;
             case "http":
             case "HTTP":
-                fitems = filterProtocol(packets, "HTTP");
+                fitems = filterProtocol("HTTP");
                 break;
             case "eth":
             case "ETH":
             case "Ethernet":
-                fitems = filterProtocol(packets, "Ethernet");
+                fitems = filterProtocol("Ethernet");
                 break;
         }
-        CapList.getItems().clear();
-        CapList.setItems(fitems);
+            CapList.getItems().clear();
+            CapList.setItems(fitems);
+        
 
     }
 
-    public ObservableList<String> filterProtocol(ArrayList<PacketP> p, String protocol) {
+    public ObservableList<String> filterProtocol(String protocol) {
+        Allpackets=new ArrayList(packets);
+        packets.clear();
         ObservableList<String> fitems = FXCollections.observableArrayList();
-        for (int i = 0; i < p.size(); i++) {
-            if (p.get(i).getProtocol().equals(protocol)) {
-                fitems.add(p.get(i).Header);
+        for (int i = 0; i <Allpackets.size(); i++) {
+            System.out.print("asd");
+            if (Allpackets.get(i).getProtocol().equals(protocol)) {
+                packets.add(Allpackets.get(i));
+                fitems.add(Allpackets.get(i).Header);
             }
+
         }
         return fitems;
     }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
