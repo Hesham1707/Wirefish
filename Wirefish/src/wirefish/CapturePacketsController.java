@@ -49,21 +49,21 @@ public class CapturePacketsController implements Initializable {
     private Label UDPTCPtap;
     @FXML
     private Label HttpTap;
-    
+
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
     Thread CaptureThread;
     ArrayList<PacketP> packets = new ArrayList<PacketP>();
-    
+
     @FXML
     private void run() {
-            int id=CapList.getSelectionModel().getSelectedIndex();
-            hexatext.setText(packets.get(id).packet.toHexdump().toString());
-            EthTap.setText(packets.get(id).EthDescription);
-            IPv4Tap.setText(packets.get(id).IpV4Description);
-            UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
-            HttpTap.setText(packets.get(id).HttpDescription);
-            
+        int id = CapList.getSelectionModel().getSelectedIndex();
+        hexatext.setText(packets.get(id).packet.toHexdump().toString());
+        EthTap.setText(packets.get(id).EthDescription);
+        IPv4Tap.setText(packets.get(id).IpV4Description);
+        UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
+        HttpTap.setText(packets.get(id).HttpDescription);
+
     }
 
     @FXML
@@ -72,24 +72,8 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
-//    String ofile = "tmp-capture-file.pcap";
-//    
-//    PcapDumper dumper = pcap.dumpOpen(ofile);
-    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-        @Override
-        public void nextPacket(PcapPacket packet, String user) {
-            //dumper.dump(packet.getCaptureHeader(),packet);
-            PacketP p = new PacketP(packet);
-            packets.add(p);
-            String RT = p.Header;
-            System.out.printf(RT);
 
-            if (!RT.equals("")) {
-                items.add(RT);
-                CapList.setItems(items);
-            }
-        }
-        //load
+    //load
 //        StringBuilder offlineErrBuffer = new StringBuilder(); // For any error msgs
 //        //1-load offline fileS
 //        Pcap pcapp = Pcap.openOffline(fromOutsideFilename, offlineErrBuffer);
@@ -118,10 +102,6 @@ public class CapturePacketsController implements Initializable {
 //        }
 //        );
 //        pcapp.loop (Pcap.LOOP_INFINITE, packetsFromFileHandler,"");
-        
-        
-        
-        
 //        public void save{
 //        String fileName = "packetsCaptured" + (Capturer.fileNum) + ".pcap";
 //        Capturer.fileNum++;
@@ -135,13 +115,9 @@ public class CapturePacketsController implements Initializable {
 //        pcap.loop(Capturer.packetsCounter, SavingPacketsHandler, "");
 //        dumper.close();
 //    }
-    };
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
 
-        
         CaptureThread = new Thread() {
             public void run() {
                 int snaplen = 64 * 1024;           // Capture all packets, no trucation  
@@ -149,11 +125,30 @@ public class CapturePacketsController implements Initializable {
                 int timeout = 10 * 1000;           // 10 seconds in millis 
                 StringBuilder errbuf = new StringBuilder();
                 pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
+                String ofile = "tmp-capture-file.pcap";
+//    
+                PcapDumper dumper = pcap.dumpOpen(ofile);
+                PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
+                    @Override
+                    public void nextPacket(PcapPacket packet, String user) {
+                        dumper.dump(packet.getCaptureHeader(), packet);
+                        PacketP p = new PacketP(packet);
+                        packets.add(p);
+                        String RT = p.Header;
+                        System.out.printf(RT);
+
+                        if (!RT.equals("")) {
+                            items.add(RT);
+                            CapList.setItems(items);
+                        }
+                    }
+
+                };
                 pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
 
             }
         };
         CaptureThread.start();
-    }
 
+    }
 }
