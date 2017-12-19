@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -55,6 +56,8 @@ public class CapturePacketsController implements Initializable {
     private Label HttpTap;
     @FXML
     private TextField filter;
+    @FXML
+    private Button btnfilter;
 
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
@@ -79,6 +82,7 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
         Allpackets = new ArrayList(packets);
+        btnfilter.setDisable(false);
     }
 
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
@@ -152,30 +156,33 @@ public class CapturePacketsController implements Initializable {
             case "IP4":
                 fitems = filterProtocol("IP4");
                 break;
+            default:
+                fitems = filterProtocol("");
+                break;
         }
+
         CapList.getItems().clear();
         CapList.setItems(fitems);
 
     }
 
     public ObservableList<String> filterProtocol(String protocol) {
+
         Allpackets = new ArrayList(packets);
         packets.clear();
         ObservableList<String> fitems = FXCollections.observableArrayList();
         for (int i = 0; i < Allpackets.size(); i++) {
-            System.out.print("asd");
-            if (Allpackets.get(i).getProtocol().equals(protocol)) {
+            if (Allpackets.get(i).getProtocol().equals(protocol)||protocol.equals("")) {
                 packets.add(Allpackets.get(i));
                 fitems.add(Allpackets.get(i).Header);
             }
-
         }
         return fitems;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        btnfilter.setDisable(true);
         CaptureThread = new Thread() {
             public void run() {
                 int snaplen = 64 * 1024;           // Capture all packets, no trucation  

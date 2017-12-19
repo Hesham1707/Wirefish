@@ -86,7 +86,7 @@
               </menus>
             </MenuBar>
             <TextField fx:id="filter" layoutX="29.0" layoutY="28.0" prefHeight="23.0" prefWidth="541.0" promptText="ex: udp, tcp, http...." />
-            <Button layoutX="583.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleFilter" text="Filter" />
+            <Button fx:id="btnfilter" layoutX="583.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleFilter" text="Filter" />
         </children>
       </Pane>
    </children>
