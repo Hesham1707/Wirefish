@@ -36,5 +36,7 @@
          <font>
             <Font name="Segoe Script Bold" size="13.0" />
          </font></Label>
+      <Button mnemonicParsing="false" text="Button" />
+      <Button layoutY="2.0" mnemonicParsing="false" onAction="#LoadFile" text="Load" />
   </children>
 </Pane>

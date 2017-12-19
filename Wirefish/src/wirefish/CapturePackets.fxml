@@ -13,7 +13,10 @@
   <children>
     <ListView id="LV" fx:id="CapList" layoutX="0.0" layoutY="23.0" onMouseClicked="#run" prefHeight="145.0" prefWidth="700.0" />
     <Button id="stop" layoutX="659.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleStopAction" text="Stop" />
-      <Pane prefHeight="200.0" prefWidth="200.0" />
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button layoutX="7.0" layoutY="2.0" mnemonicParsing="false" onAction="#LoadFile" text="Load" />
+         </children></Pane>
     <Accordion layoutY="223.0" prefHeight="375.0" prefWidth="700.0">
       <panes>
         <TitledPane animated="false" prefHeight="250.0" prefWidth="600.0" text="Ethernet">
