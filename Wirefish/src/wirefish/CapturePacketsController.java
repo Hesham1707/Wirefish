@@ -27,6 +27,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.jnetpcap.Pcap;
+import org.jnetpcap.PcapDumper;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
@@ -77,10 +78,13 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
-
+    String ofile = "tmp-capture-file.pcap";
+    
+    PcapDumper dumper = pcap.dumpOpen(ofile);
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
         @Override
         public void nextPacket(PcapPacket packet, String user) {
+            dumper.dump(packet.getCaptureHeader(),packet);
             PacketP p = new PacketP(packet);
             packets.add(p);
             String RT = p.Header;
@@ -92,6 +96,19 @@ public class CapturePacketsController implements Initializable {
                 CapList.setItems(items);
             }
         }
+//        public void save{
+//        String fileName = "packetsCaptured" + (Capturer.fileNum) + ".pcap";
+//        Capturer.fileNum++;
+//        PcapDumper dumper = this.pcap.dumpOpen(fileName);
+//        PcapPacketHandler<String> SavingPacketsHandler = new PcapPacketHandler<String>() {
+//            @Override
+//            public void nextPacket(PcapPacket packet, String user) {
+//                dumper.dump(packet.getCaptureHeader(), packet);
+//            }
+//        };
+//        pcap.loop(Capturer.packetsCounter, SavingPacketsHandler, "");
+//        dumper.close();
+//    }
     };
 
     @Override
