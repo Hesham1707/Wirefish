@@ -78,6 +78,7 @@ public class CapturePacketsController implements Initializable {
         pcap.close();
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
+        Allpackets=new ArrayList(packets);
     }
 
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
@@ -122,6 +123,7 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
+         packets = new ArrayList(Allpackets);
         System.out.println("Packets Filtered");
         ObservableList<String> fitems = FXCollections.observableArrayList();
         fitems=items;
@@ -148,8 +150,7 @@ public class CapturePacketsController implements Initializable {
         }
             CapList.getItems().clear();
             CapList.setItems(fitems);
-        
-
+       
     }
 
     public ObservableList<String> filterProtocol(String protocol) {
