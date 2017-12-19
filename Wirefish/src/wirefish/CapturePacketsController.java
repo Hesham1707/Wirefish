@@ -19,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -51,6 +52,8 @@ public class CapturePacketsController implements Initializable {
     private Label UDPTCPtap;
     @FXML
     private Label HttpTap;
+    @FXML
+    private TextField filter;
 
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
@@ -74,13 +77,13 @@ public class CapturePacketsController implements Initializable {
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
     }
-//asdasd
+
     public void LoadFile() {
         FileChooser filechooser = new FileChooser();
         File sFile = filechooser.showOpenDialog(null);
         String fileName = sFile.getAbsolutePath();
-        StringBuilder eBuffer = new StringBuilder();  
-             Pcap pcap = Pcap.openOffline(fileName,eBuffer);
+        StringBuilder eBuffer = new StringBuilder();
+        Pcap pcap = Pcap.openOffline(fileName, eBuffer);
         PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
 
             public void nextPacket(PcapPacket packet, String user) {
@@ -96,15 +99,53 @@ public class CapturePacketsController implements Initializable {
             }
 
         };
-        
-         try {
-           pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
-        }
-        catch(Exception ex)
-        {
+
+        try {
+            pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
+        } catch (Exception ex) {
             System.out.println("eof");
         }
+    }
 
+    @FXML
+    public void handleFilter(ActionEvent e) {
+        System.out.println("YOOOOOHOOOOOOO");
+        ObservableList<String> fitems = FXCollections.observableArrayList();
+        String text = filter.getText();
+        switch (text) {
+            case "udp":
+            case "UDP":
+                fitems=filterProtocol(packets,"UDP");
+                break;
+            case "tcp":
+            case "TCP":
+                fitems=filterProtocol(packets,"TCP");
+                break;
+            case "http":
+            case "HTTP":
+                fitems=filterProtocol(packets,"HTTP");
+                break;
+            case "eth":
+            case "ETH":
+            case "Ethernet":
+                fitems=filterProtocol(packets,"Ethernet");
+                break;
+        }
+        CapList.getItems().clear();
+        CapList.refresh();
+        CapList.setItems(fitems);
+        CapList.refresh();
+
+    }
+
+    public ObservableList<String> filterProtocol(ArrayList<PacketP> p, String protocol) {
+        ObservableList<String> fitems = FXCollections.observableArrayList();
+        for (int i = 0; i < p.size(); i++) {
+            if (p.get(i).getProtocol().equals(protocol)) {
+                fitems.add(p.get(i).Header);
+            }
+        }
+        return fitems;
     }
 
     //load

@@ -87,6 +87,11 @@ public class PacketP {
         this.Protocol = protocol;
     }
 
+    public String getProtocol() {
+        return Protocol;
+    }
+    
+
     private void Inti() {
         time = packet.getCaptureHeader().timestampInMillis();//time of capture packet
         timestamp = new Timestamp(time);
