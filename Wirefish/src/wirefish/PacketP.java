@@ -23,7 +23,7 @@ import org.jnetpcap.protocol.tcpip.Udp;
  * @author user1
  */
 public class PacketP {
-
+    static int id=-1;
     PcapPacket packet;
     String Protocol = "";
     String SourceIP = "", destinationIP = "";
@@ -47,6 +47,7 @@ public class PacketP {
 
     public PacketP(PcapPacket p) {
         this.packet = p;
+        this.id++;
         //get source ip and destination
         
         if (packet.hasHeader(eh)) {
@@ -97,7 +98,7 @@ public class PacketP {
         timestamp = new Timestamp(time);
         lengthCaptured = packet.getCaptureHeader().caplen();//acual length of packet
         length = packet.getCaptureHeader().wirelen();//length on wire
-        Header = "Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
+        Header = "id: "+this.id+" ,Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
     }
 
 }
