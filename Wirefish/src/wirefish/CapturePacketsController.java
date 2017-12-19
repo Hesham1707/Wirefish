@@ -69,7 +69,6 @@ public class CapturePacketsController implements Initializable {
             UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
             HttpTap.setText(packets.get(id).HttpDescription);
             
-            
     }
 
     @FXML
