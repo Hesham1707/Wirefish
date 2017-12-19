@@ -121,7 +121,7 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
-        System.out.println("YOOOOOHOOOOOOO");
+        System.out.println("Packets Filtered");
         ObservableList<String> fitems = FXCollections.observableArrayList();
         String text = filter.getText();
         switch (text) {
