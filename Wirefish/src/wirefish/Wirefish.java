@@ -18,18 +18,19 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.jnetpcap.*;
 
-
 /**
  *
  * @author Hesham-Desktop
  */
 public class Wirefish extends Application {
+
     public static Stage StageOpened;
     public static Scene sc;
-    private static InterfaceWindowController wc=new InterfaceWindowController();
-        @Override
+    private static InterfaceWindowController wc = new InterfaceWindowController();
+
+    @Override
     public void start(Stage primaryStage) throws Exception {
-        StageOpened=primaryStage;
+        StageOpened = primaryStage;
         StageOpened.setTitle("WireFish");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InterfaceWindow.fxml"));
         Parent root = loader.load();
@@ -38,12 +39,9 @@ public class Wirefish extends Application {
         StageOpened.show();
     }
 
-    
-
     public static void main(String[] args) {
-        launch(args); 
-        
-       
+        launch(args);
+
     }
-    
+
 }

@@ -5,8 +5,6 @@
  */
 package wirefish;
 
-
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -24,7 +22,8 @@ import org.jnetpcap.protocol.tcpip.Udp;
  * @author user1
  */
 public class PacketP {
-    static int id=-1;
+
+    static int id = -1;
     PcapPacket packet;
     String Protocol = "";
     String SourceIP = "", destinationIP = "";
@@ -33,26 +32,26 @@ public class PacketP {
     Ethernet eh = new Ethernet();
     Ip4 ip = new Ip4();
     Udp udp = new Udp();
-    Http http=new Http();
+    Http http = new Http();
     long time;
     Timestamp timestamp;
     int lengthCaptured;
     int length;
     String Header = "";
-    
+
     // Hossam 
-    String EthDescription  = "No description found";
-    String TcpUdpDescription  = "No description found";
-    String HttpDescription  = "No description found";
-    String IpV4Description  = "No description found";
+    String EthDescription = "No description found";
+    String TcpUdpDescription = "No description found";
+    String HttpDescription = "No description found";
+    String IpV4Description = "No description found";
 
     public PacketP(PcapPacket p) {
         this.packet = p;
         this.id++;
         //get source ip and destination
-        
+
         if (packet.hasHeader(eh)) {
-            this.setProtocol("Ethernet");  
+            this.setProtocol("Ethernet");
             this.SourceIP = FormatUtils.mac(eh.source());
             this.destinationIP = FormatUtils.mac(eh.destination());
             this.EthDescription = packet.getHeader(eh).toString();
@@ -76,14 +75,14 @@ public class PacketP {
                 this.PortDst = udp.destination();
                 this.TcpUdpDescription = packet.getHeader(udp).toString();
             }
-            if(packet.hasHeader(http)){
-             this.HttpDescription = packet.getHeader(http).toString();
+            if (packet.hasHeader(http)) {
+                this.HttpDescription = packet.getHeader(http).toString();
                 this.setProtocol("HTTP");
             }
             this.Inti();
-           // this.TcpUdpDescription = packet.getHeader(http).toString();
+            // this.TcpUdpDescription = packet.getHeader(http).toString();
         }
-          
+
     }
 
     private void setProtocol(String protocol) {
@@ -93,21 +92,22 @@ public class PacketP {
     public String getProtocol() {
         return Protocol;
     }
-    
 
     private void Inti() {
         time = packet.getCaptureHeader().timestampInMillis();//time of capture packet
         timestamp = new Timestamp(time);
         lengthCaptured = packet.getCaptureHeader().caplen();//acual length of packet
         length = packet.getCaptureHeader().wirelen();//length on wire
-        Header = "id: "+this.id+" ,Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
+        Header = "id: " + this.id + " ,Time: " + timestamp.toString() + " ,SourceIP: " + this.SourceIP + " ,DestinationIP: " + this.destinationIP + " ,Protocol: " + this.Protocol + " ,Length: " + this.length;
     }
-    
+
     //to get the packet with any id you want, it return null if no packects with this id 
-    public static PacketP getPacketbyID(int id,ArrayList<PacketP> packets){
-        for(int i=0;i<packets.size();i++)
-            if(packets.get(i).id==id)
+    public static PacketP getPacketbyID(int id, ArrayList<PacketP> packets) {
+        for (int i = 0; i < packets.size(); i++) {
+            if (packets.get(i).id == id) {
                 return packets.get(i);
+            }
+        }
         return null;
     }
 }

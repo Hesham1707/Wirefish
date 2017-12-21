@@ -171,7 +171,7 @@ public class CapturePacketsController implements Initializable {
         packets.clear();
         ObservableList<String> fitems = FXCollections.observableArrayList();
         for (int i = 0; i < Allpackets.size(); i++) {
-            if (Allpackets.get(i).getProtocol().equals(protocol)||protocol.equals("")) {
+            if (Allpackets.get(i).getProtocol().equals(protocol) || protocol.equals("")) {
                 packets.add(Allpackets.get(i));
                 fitems.add(Allpackets.get(i).Header);
             }

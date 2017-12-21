@@ -57,7 +57,7 @@ public class InterfaceWindowController implements Initializable {
 
         for (int i = 0; i < devices.size(); i++) {
             if (devices.get(i).getDescription().equals(selected)) {
-                index=i;
+                index = i;
                 System.out.println("SUCCESS OPENING" + devices.get(i).getDescription());
                 break;
             }
@@ -71,7 +71,7 @@ public class InterfaceWindowController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CapturePackets.fxml"));
             Parent root = loader.load();
             Scene sc1 = new Scene(root);
-            StageOpened.setScene(sc1);  
+            StageOpened.setScene(sc1);
         } catch (IOException ex) {
             Logger.getLogger(InterfaceWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
