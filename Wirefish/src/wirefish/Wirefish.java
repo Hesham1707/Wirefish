@@ -23,7 +23,9 @@ import org.jnetpcap.*;
  * @author Hesham-Desktop
  */
 public class Wirefish extends Application {
-
+    
+    public static String fileName;
+    public static boolean LoadMode=false;
     public static Stage StageOpened;
     public static Scene sc;
     private static InterfaceWindowController wc = new InterfaceWindowController();

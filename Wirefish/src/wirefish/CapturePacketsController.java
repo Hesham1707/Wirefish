@@ -37,6 +37,7 @@ import org.jnetpcap.PcapDumper;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
+import org.jnetpcap.util.PcapPacketArrayList;
 import static wirefish.InterfaceWindowController.alldevs;
 import static wirefish.InterfaceWindowController.index;
 import static wirefish.Wirefish.StageOpened;
@@ -114,35 +115,48 @@ public class CapturePacketsController implements Initializable {
 
         @Override
         public void nextPacket(PcapPacket packet, String user) {
-            try {
-                PacketP p = new PacketP(packet);
-                packets.add(p);
-                String RT = p.Header;
-                PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
-                System.out.println(RT);
+            PacketP p = new PacketP(packet);
+            packets.add(p);
+            String RT = p.Header;
+            PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
+            System.out.println(RT);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!RT.equals("")) {
-                            data.add(PacketRow);
-                            PacketTable.setItems(data);
-                        }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (!RT.equals("")) {
+                        data.add(PacketRow);
+                        PacketTable.setItems(data);
                     }
-                });
+                }
+            });
 
-            } catch (Exception ex) {
-            }
         }
 
     };
 
+    @FXML
+    public void SaveFile() {
+        String ofile = "tmp-capture-file.pcap";
+        PcapDumper dumper = pcap.dumpOpen(ofile);
+    }
+
+    @FXML
     public void LoadFile() {
         FileChooser filechooser = new FileChooser();
         File sFile = filechooser.showOpenDialog(null);
-        String fileName = sFile.getAbsolutePath();
+        Wirefish.fileName = sFile.getAbsolutePath();
+//        Wirefish.LoadMode = true;
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("CapturePackets.fxml"));
+//            Parent root = loader.load();
+//            Scene sc1 = new Scene(root);
+//            StageOpened.setScene(sc1);
+//        } catch (IOException ex) {
+//            Logger.getLogger(InterfaceWindowController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         StringBuilder eBuffer = new StringBuilder();
-        Pcap pcap = Pcap.openOffline(fileName, eBuffer);
+        Pcap pcap = Pcap.openOffline(Wirefish.fileName, eBuffer);
 
         try {
             pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
@@ -231,21 +245,41 @@ public class CapturePacketsController implements Initializable {
 
         PacketTable.setItems(data);
         //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
+//        if (!Wirefish.LoadMode) {
+            CaptureThread = new Thread() {
+                public void run() {
+                    int snaplen = 64 * 1024;           // Capture all packets, no trucation  
+                    int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
+                    int timeout = 10 * 1000;           // 10 seconds in millis 
+                    StringBuilder errbuf = new StringBuilder();
+                    pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
+//                    String ofile = "tmp-capture-file.pcap";
+//                    PcapDumper dumper = pcap.dumpOpen(ofile);
+                    pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
 
-        CaptureThread = new Thread() {
-            public void run() {
-                int snaplen = 64 * 1024;           // Capture all packets, no trucation  
-                int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-                int timeout = 10 * 1000;           // 10 seconds in millis 
-                StringBuilder errbuf = new StringBuilder();
-                pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
-                String ofile = "tmp-capture-file.pcap";
-                PcapDumper dumper = pcap.dumpOpen(ofile);
-                pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
-
-            }
-        };
-        CaptureThread.start();
-
+                }
+            };
+            CaptureThread.start();
+//        } else {
+//            System.out.println("Load");
+//            Wirefish.LoadMode = false;
+//            CaptureThread = new Thread() {
+//                public void run() {
+//                    System.out.println("Thread opened");
+//                    StringBuilder eBuffer = new StringBuilder();
+//                    Pcap pcap = Pcap.openOffline(Wirefish.fileName, eBuffer);
+//
+//                    try {
+//
+//                        pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
+//
+//                    } catch (Exception ex) {
+//                        System.out.println("eof");
+//                    }
+//
+//                }
+//            };
+//            CaptureThread.start();
+//        }
     }
 }
