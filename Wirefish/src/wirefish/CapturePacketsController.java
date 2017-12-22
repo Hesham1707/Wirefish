@@ -83,7 +83,9 @@ public class CapturePacketsController implements Initializable {
     ArrayList<PacketP> packets = new ArrayList<PacketP>();
     ArrayList<PacketP> Allpackets = new ArrayList<PacketP>();
     
-      private final ObservableList<PacketTableD> data =
+      private  ObservableList<PacketTableD> data =
+        FXCollections.observableArrayList();
+       private  ObservableList<PacketTableD> FilteredData =
         FXCollections.observableArrayList();
      //init columns 
        
@@ -153,48 +155,49 @@ public class CapturePacketsController implements Initializable {
     @FXML
     public void handleFilter(ActionEvent e) {
         System.out.println("Packets Filtered");
-        ObservableList<String> fitems = FXCollections.observableArrayList();
-        fitems=items;
+        FilteredData=data;
         String text = filter.getText();
         System.out.print(text);
         switch (text) {
             case "udp":
             case "UDP":
-                fitems = filterProtocol("UDP");
+                FilteredData = filterProtocol("UDP");
                 break;
             case "tcp":
             case "TCP":
-                fitems = filterProtocol("TCP");
+                FilteredData = filterProtocol("TCP");
                 break;
             case "http":
             case "HTTP":
-                fitems = filterProtocol("HTTP");
+                FilteredData= filterProtocol("HTTP");
                 break;
             case "eth":
             case "ETH":
             case "Ethernet":
-                fitems = filterProtocol("Ethernet");
+                FilteredData= filterProtocol("Ethernet");
                 break;
         }
+            PacketTable.getItems().clear();
+             PacketTable.setItems(FilteredData);
            // CapList.getItems().clear();
           //  CapList.setItems(fitems);
         
 
     }
 
-    public ObservableList<String> filterProtocol(String protocol) {
+    public ObservableList<PacketTableD> filterProtocol(String protocol) {
         Allpackets=new ArrayList(packets);
         packets.clear();
-        ObservableList<String> fitems = FXCollections.observableArrayList();
         for (int i = 0; i <Allpackets.size(); i++) {
             System.out.print("asd");
             if (Allpackets.get(i).getProtocol().equals(protocol)) {
                 packets.add(Allpackets.get(i));
-                fitems.add(Allpackets.get(i).Header);
+                PacketP p = Allpackets.get(i);
+                FilteredData.add(new PacketTableD( p.PacketID+"" , p.time+"", p.SourceIP, p.destinationIP, p.Protocol, p.length+""));
             }
 
         }
-        return fitems;
+        return FilteredData;
     }
 
     @Override
