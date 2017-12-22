@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -50,7 +51,7 @@ import static wirefish.Wirefish.StageOpened;
 public class CapturePacketsController implements Initializable {
 
     @FXML
-    private Label hexatext;
+    private TextArea hexatext;
     @FXML
     private Label EthTap;
     @FXML
@@ -138,11 +139,7 @@ public class CapturePacketsController implements Initializable {
 //        }
 //
 //    };
-    @FXML
-    public void SaveFile() {
-        String ofile = "tmp-capture-file.pcap";
-        PcapDumper dumper = pcap.dumpOpen(ofile);
-    }
+    
 
     @FXML
     public void LoadFile() {
