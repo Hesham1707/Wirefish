@@ -112,4 +112,8 @@ public class PacketP {
         }
         return null;
     }
+    public static void resetPacketsID(){
+        PacketP.id=-1;
+    }
+    
 }

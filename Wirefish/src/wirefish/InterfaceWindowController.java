@@ -1,5 +1,6 @@
 package wirefish;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.PcapPacket;
@@ -44,6 +46,22 @@ public class InterfaceWindowController implements Initializable {
     ObservableList<String> items = FXCollections.observableArrayList();
     public static int index;
 
+    @FXML
+    public void LoadFile() {
+        FileChooser filechooser = new FileChooser();
+        File sFile = filechooser.showOpenDialog(null);
+        Wirefish.fileName = sFile.getAbsolutePath();
+        Wirefish.LoadMode = true;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CapturePackets.fxml"));
+            Parent root = loader.load();
+            Scene sc1 = new Scene(root);
+            StageOpened.setScene(sc1);
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public ArrayList<PcapIf> getDevices() {
         int r = Pcap.findAllDevs(alldevs, errbuf);
         return alldevs;
