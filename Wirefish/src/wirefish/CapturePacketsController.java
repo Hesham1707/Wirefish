@@ -111,29 +111,29 @@ public class CapturePacketsController implements Initializable {
         filterbtn.setDisable(false);
     }
 
-    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-
-        @Override
-        public void nextPacket(PcapPacket packet, String user) {
-            PacketP p = new PacketP(packet);
-            packets.add(p);
-            String RT = p.Header;
-            PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
-            System.out.println(RT);
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (!RT.equals("")) {
-                        data.add(PacketRow);
-                        PacketTable.setItems(data);
-                    }
-                }
-            });
-
-        }
-
-    };
+//    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
+//
+//        @Override
+//        public void nextPacket(PcapPacket packet, String user) {
+//            PacketP p = new PacketP(packet);
+//            packets.add(p);
+//            String RT = p.Header;
+//            PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
+//            System.out.println(RT);
+//
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (!RT.equals("")) {
+//                        data.add(PacketRow);
+//                        PacketTable.setItems(data);
+//                    }
+//                }
+//            });
+//
+//        }
+//
+//    };
 
     @FXML
     public void SaveFile() {
@@ -158,11 +158,11 @@ public class CapturePacketsController implements Initializable {
         StringBuilder eBuffer = new StringBuilder();
         Pcap pcap = Pcap.openOffline(Wirefish.fileName, eBuffer);
 
-        try {
-            pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
-        } catch (Exception ex) {
-            System.out.println("eof");
-        }
+//        try {
+//            pcap.loop(Pcap.LOOP_INFINITE, jpacketHandler, "");
+//        } catch (Exception ex) {
+//            System.out.println("eof");
+//        }
     }
 
     @FXML
@@ -246,20 +246,42 @@ public class CapturePacketsController implements Initializable {
         PacketTable.setItems(data);
         //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
 //        if (!Wirefish.LoadMode) {
-            CaptureThread = new Thread() {
-                public void run() {
-                    int snaplen = 64 * 1024;           // Capture all packets, no trucation  
-                    int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-                    int timeout = 10 * 1000;           // 10 seconds in millis 
-                    StringBuilder errbuf = new StringBuilder();
-                    pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
-//                    String ofile = "tmp-capture-file.pcap";
-//                    PcapDumper dumper = pcap.dumpOpen(ofile);
-                    pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
+        CaptureThread = new Thread() {
+            public void run() {
+                int snaplen = 64 * 1024;           // Capture all packets, no trucation  
+                int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
+                int timeout = 10 * 1000;           // 10 seconds in millis 
+                StringBuilder errbuf = new StringBuilder();
+                pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
+                String ofile = "tmp-capture-file.pcap";
+                PcapDumper dumper = pcap.dumpOpen(ofile);
+                PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
+                    @Override
+                    public void nextPacket(PcapPacket packet, String user) {
+                        dumper.dump(packet.getCaptureHeader(), packet);
+                        PacketP p = new PacketP(packet);
+                        packets.add(p);
+                        String RT = p.Header;
+                        PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
+                        System.out.println(RT);
 
-                }
-            };
-            CaptureThread.start();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!RT.equals("")) {
+                                    data.add(PacketRow);
+                                    PacketTable.setItems(data);
+                                }
+                            }
+                        });
+                    }
+
+                };
+                pcap.loop(pcap.LOOP_INFINITE, jpacketHandler, "HESHAM rocks!");
+                
+            }
+        };
+        CaptureThread.start();
 //        } else {
 //            System.out.println("Load");
 //            Wirefish.LoadMode = false;
