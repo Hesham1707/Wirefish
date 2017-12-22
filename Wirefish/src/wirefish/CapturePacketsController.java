@@ -96,13 +96,14 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     private void run() {
-
+        try{
         int id = PacketTable.getSelectionModel().getSelectedIndex();
         hexatext.setText(packets.get(id).packet.toHexdump());
         EthTap.setText(packets.get(id).EthDescription);
         IPv4Tap.setText(packets.get(id).IpV4Description);
         UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
         HttpTap.setText(packets.get(id).HttpDescription);
+        }catch(Exception ex){System.out.println("Random error occured, try again");}
 
     }
     @FXML
