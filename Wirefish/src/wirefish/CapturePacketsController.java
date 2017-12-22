@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -46,7 +47,6 @@ import static wirefish.Wirefish.StageOpened;
  * @author user1
  */
 public class CapturePacketsController implements Initializable {
- 
 
     @FXML
     private Label hexatext;
@@ -64,37 +64,35 @@ public class CapturePacketsController implements Initializable {
     @FXML
     TableView<PacketTableD> PacketTable;
     @FXML
-    TableColumn noColumn ;
+    TableColumn noColumn;
     @FXML
-    TableColumn timeColumn ;
+    TableColumn timeColumn;
     @FXML
-    TableColumn sourceColumn ;
+    TableColumn sourceColumn;
     @FXML
-    TableColumn destColumn ;
+    TableColumn destColumn;
     @FXML
     TableColumn protocolColumn;
     @FXML
-    TableColumn lengthColumn ;
+    TableColumn lengthColumn;
+    @FXML
+    Button filterbtn;
 
-    
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
     Thread CaptureThread;
     ArrayList<PacketP> packets = new ArrayList<PacketP>();
     ArrayList<PacketP> Allpackets = new ArrayList<PacketP>();
-    
-      private  ObservableList<PacketTableD> data =
-        FXCollections.observableArrayList();
-       private  ObservableList<PacketTableD> FilteredData =
-        FXCollections.observableArrayList();
-     //init columns 
-       
 
+    private ObservableList<PacketTableD> data
+            = FXCollections.observableArrayList();
+    private ObservableList<PacketTableD> FilteredData
+            = FXCollections.observableArrayList();
+    //init columns 
 
     @FXML
     private void run() {
 
-        
         int id = PacketTable.getSelectionModel().getSelectedIndex();
         hexatext.setText(packets.get(id).packet.toHexdump().toString());
         EthTap.setText(packets.get(id).EthDescription);
@@ -109,6 +107,7 @@ public class CapturePacketsController implements Initializable {
         pcap.close();
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
+        filterbtn.setDisable(false);
     }
 
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
@@ -119,7 +118,7 @@ public class CapturePacketsController implements Initializable {
                 PacketP p = new PacketP(packet);
                 packets.add(p);
                 String RT = p.Header;
-                PacketTableD PacketRow = new PacketTableD( p.PacketID+"" , p.time+"", p.SourceIP, p.destinationIP, p.Protocol, p.length+"");
+                PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
                 System.out.println(RT);
 
                 Platform.runLater(new Runnable() {
@@ -155,7 +154,7 @@ public class CapturePacketsController implements Initializable {
     @FXML
     public void handleFilter(ActionEvent e) {
         System.out.println("Packets Filtered");
-        FilteredData=data;
+        FilteredData = data;
         String text = filter.getText();
         System.out.print(text);
         switch (text) {
@@ -169,65 +168,59 @@ public class CapturePacketsController implements Initializable {
                 break;
             case "http":
             case "HTTP":
-                FilteredData= filterProtocol("HTTP");
+                FilteredData = filterProtocol("HTTP");
                 break;
             case "eth":
             case "ETH":
             case "Ethernet":
-                FilteredData= filterProtocol("Ethernet");
+                FilteredData = filterProtocol("Ethernet");
                 break;
         }
-            PacketTable.getItems().clear();
-             PacketTable.setItems(FilteredData);
-           // CapList.getItems().clear();
-          //  CapList.setItems(fitems);
-        
+        PacketTable.getItems().clear();
+        PacketTable.setItems(FilteredData);
+        // CapList.getItems().clear();
+        //  CapList.setItems(fitems);
 
     }
 
     public ObservableList<PacketTableD> filterProtocol(String protocol) {
-        Allpackets=new ArrayList(packets);
+        Allpackets = new ArrayList(packets);
         packets.clear();
-        for (int i = 0; i <Allpackets.size(); i++) {
-            System.out.print("asd");
+        for (int i = 0; i < Allpackets.size(); i++) {
+
             if (Allpackets.get(i).getProtocol().equals(protocol)) {
                 packets.add(Allpackets.get(i));
                 PacketP p = Allpackets.get(i);
-                FilteredData.add(new PacketTableD( p.PacketID+"" , p.time+"", p.SourceIP, p.destinationIP, p.Protocol, p.length+""));
+                System.out.println("asd");
+                PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
+                FilteredData.add(PacketRow);
             }
-
         }
         return FilteredData;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-                        
-       
+        filterbtn.setDisable(true);
+
         noColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("no"));
- 
-       
+
         timeColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("time"));
- 
-        
+
         sourceColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("source"));
 
-        
         destColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("dest"));
 
-        
         protocolColumn.setCellValueFactory(
-                new PropertyValueFactory<PacketTableD, String>("protocol")); 
-        
-       
+                new PropertyValueFactory<PacketTableD, String>("protocol"));
+
         lengthColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("length"));
-        
+
         PacketTable.setItems(data);
         //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
 
@@ -248,5 +241,3 @@ public class CapturePacketsController implements Initializable {
 
     }
 }
-
-
