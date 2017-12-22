@@ -153,6 +153,7 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
+        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
         System.out.println("Packets Filtered");
         FilteredData = data;
         String text = filter.getText();
@@ -175,6 +176,12 @@ public class CapturePacketsController implements Initializable {
             case "Ethernet":
                 FilteredData = filterProtocol("Ethernet");
                 break;
+            case "Ipv4":
+            case "Ip4":
+            case "IPV4":
+            case "ip4":
+                FilteredData = filterProtocol("Ethernet");
+                break;
         }
         PacketTable.getItems().clear();
         PacketTable.setItems(FilteredData);
@@ -184,6 +191,7 @@ public class CapturePacketsController implements Initializable {
     }
 
     public ObservableList<PacketTableD> filterProtocol(String protocol) {
+        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
         Allpackets = new ArrayList(packets);
         packets.clear();
         for (int i = 0; i < Allpackets.size(); i++) {
