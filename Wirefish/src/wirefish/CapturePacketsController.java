@@ -79,6 +79,8 @@ public class CapturePacketsController implements Initializable {
     TableColumn lengthColumn;
     @FXML
     Button filterbtn;
+    @FXML
+    Button startbtn;
 
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
@@ -96,50 +98,36 @@ public class CapturePacketsController implements Initializable {
     private void run() {
 
         int id = PacketTable.getSelectionModel().getSelectedIndex();
-        hexatext.setText(packets.get(id).packet.toHexdump().toString());
+        hexatext.setText(packets.get(id).packet.toHexdump());
         EthTap.setText(packets.get(id).EthDescription);
         IPv4Tap.setText(packets.get(id).IpV4Description);
         UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
         HttpTap.setText(packets.get(id).HttpDescription);
 
     }
+    @FXML
+    private void handleStartButton(){
+        
+        filterbtn.setDisable(true);
+        startbtn.setDisable(true);
+        PacketTable.getItems().clear();
+        Allpackets.clear();
+        packets.clear();
+        start();
+        }
 
     @FXML
     private void handleStopAction(ActionEvent event) {
-        try{
-        pcap.close();
-        CaptureThread.stop();
-        System.out.println("CAPTURE STOPPED");
-        filterbtn.setDisable(false);
-        }catch(Exception ex){
+        try {
+            pcap.close();
+            CaptureThread.stop();
+            System.out.println("CAPTURE STOPPED");
+            filterbtn.setDisable(false);
+            startbtn.setDisable(false);
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
-
-//    PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
-//
-//        @Override
-//        public void nextPacket(PcapPacket packet, String user) {
-//            PacketP p = new PacketP(packet);
-//            packets.add(p);
-//            String RT = p.Header;
-//            PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
-//            System.out.println(RT);
-//
-//            Platform.runLater(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (!RT.equals("")) {
-//                        data.add(PacketRow);
-//                        PacketTable.setItems(data);
-//                    }
-//                }
-//            });
-//
-//        }
-//
-//    };
-    
 
     @FXML
     public void LoadFile() {
@@ -216,8 +204,8 @@ public class CapturePacketsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         filterbtn.setDisable(true);
+        startbtn.setDisable(true);
         hexatext.setEditable(false);
-
         noColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("no"));
 
@@ -238,7 +226,10 @@ public class CapturePacketsController implements Initializable {
 
         PacketTable.setItems(data);
         //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
-        if (!Wirefish.LoadMode) {
+        start();
+    }
+    public void start(){
+    if (!Wirefish.LoadMode) {
             PacketP.resetPacketsID();
             CaptureThread = new Thread() {
                 public void run() {
@@ -311,16 +302,13 @@ public class CapturePacketsController implements Initializable {
 
                     } catch (Exception ex) {
                         System.out.println("eof");
-                    }
-                    finally{
+                    } finally {
                         pcap.close();
                         CaptureThread.stop();
                     }
                 }
             };
-                    CaptureThread.start();
+            CaptureThread.start();
         }
-
-
     }
 }
