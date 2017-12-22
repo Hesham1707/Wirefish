@@ -234,12 +234,12 @@ public class CapturePacketsController implements Initializable {
             PacketP.resetPacketsID();
             CaptureThread = new Thread() {
                 public void run() {
-                    int snaplen = 64 * 1024;           // Capture all packets, no trucation  
-                    int flags = Pcap.MODE_PROMISCUOUS; // capture all packets  
-                    int timeout = 10 * 1000;           // 10 seconds in millis 
+                    int snaplen = 64 * 1024;             
+                    int flags = Pcap.MODE_PROMISCUOUS; 
+                    int timeout = 10 * 1000;           
                     StringBuilder errbuf = new StringBuilder();
                     pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
-                    String ofile = "tmp-capture-file.pcap";
+                    String ofile = "Pcap-Save-File.pcap";
                     PcapDumper dumper = pcap.dumpOpen(ofile);
                     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
                         @Override
