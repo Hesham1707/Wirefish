@@ -216,6 +216,7 @@ public class CapturePacketsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         filterbtn.setDisable(true);
+        hexatext.setEditable(false);
 
         noColumn.setCellValueFactory(
                 new PropertyValueFactory<PacketTableD, String>("no"));
