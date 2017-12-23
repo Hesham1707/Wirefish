@@ -47,8 +47,7 @@ import static wirefish.Wirefish.StageOpened;
  */
 public class CapturePacketsController implements Initializable {
  
-    @FXML
-    private ListView<String> CapList;
+
     @FXML
     private Label hexatext;
     @FXML
@@ -94,7 +93,7 @@ public class CapturePacketsController implements Initializable {
     private void run() {
 
         
-        int id = CapList.getSelectionModel().getSelectedIndex();
+        int id = PacketTable.getSelectionModel().getSelectedIndex();
         hexatext.setText(packets.get(id).packet.toHexdump().toString());
         EthTap.setText(packets.get(id).EthDescription);
         IPv4Tap.setText(packets.get(id).IpV4Description);
@@ -125,9 +124,7 @@ public class CapturePacketsController implements Initializable {
                     @Override
                     public void run() {
                         if (!RT.equals("")) {
-                            items.add(RT);
                             data.add(PacketRow);
-                            CapList.setItems(items);
                             PacketTable.setItems(data);
                         }
                     }
@@ -179,8 +176,8 @@ public class CapturePacketsController implements Initializable {
                 fitems = filterProtocol("Ethernet");
                 break;
         }
-            CapList.getItems().clear();
-            CapList.setItems(fitems);
+           // CapList.getItems().clear();
+          //  CapList.setItems(fitems);
         
 
     }
