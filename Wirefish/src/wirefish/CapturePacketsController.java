@@ -10,6 +10,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,11 +21,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -41,7 +46,7 @@ import static wirefish.Wirefish.StageOpened;
  * @author user1
  */
 public class CapturePacketsController implements Initializable {
-
+ 
     @FXML
     private ListView<String> CapList;
     @FXML
@@ -56,23 +61,46 @@ public class CapturePacketsController implements Initializable {
     private Label HttpTap;
     @FXML
     private TextField filter;
+    // the table and its columns 
     @FXML
-    private Button btnfilter;
+    TableView<PacketTableD> PacketTable;
+    @FXML
+    TableColumn noColumn ;
+    @FXML
+    TableColumn timeColumn ;
+    @FXML
+    TableColumn sourceColumn ;
+    @FXML
+    TableColumn destColumn ;
+    @FXML
+    TableColumn protocolColumn;
+    @FXML
+    TableColumn lengthColumn ;
 
+    
     ObservableList<String> items = FXCollections.observableArrayList();
     Pcap pcap;
     Thread CaptureThread;
     ArrayList<PacketP> packets = new ArrayList<PacketP>();
     ArrayList<PacketP> Allpackets = new ArrayList<PacketP>();
+    
+      private final ObservableList<PacketTableD> data =
+        FXCollections.observableArrayList();
+     //init columns 
+       
+
 
     @FXML
     private void run() {
-        int index = CapList.getSelectionModel().getSelectedIndex();
-        hexatext.setText(packets.get(index).packet.toHexdump().toString());
-        EthTap.setText(packets.get(index).EthDescription);
-        IPv4Tap.setText(packets.get(index).IpV4Description);
-        UDPTCPtap.setText(packets.get(index).TcpUdpDescription);
-        HttpTap.setText(packets.get(index).HttpDescription);
+
+        
+        int id = CapList.getSelectionModel().getSelectedIndex();
+        hexatext.setText(packets.get(id).packet.toHexdump().toString());
+        EthTap.setText(packets.get(id).EthDescription);
+        IPv4Tap.setText(packets.get(id).IpV4Description);
+        UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
+        HttpTap.setText(packets.get(id).HttpDescription);
+
     }
 
     @FXML
@@ -80,8 +108,6 @@ public class CapturePacketsController implements Initializable {
         pcap.close();
         CaptureThread.stop();
         System.out.println("CAPTURE STOPPED");
-        Allpackets = new ArrayList(packets);
-        btnfilter.setDisable(false);
     }
 
     PcapPacketHandler<String> jpacketHandler = new PcapPacketHandler<String>() {
@@ -92,6 +118,7 @@ public class CapturePacketsController implements Initializable {
                 PacketP p = new PacketP(packet);
                 packets.add(p);
                 String RT = p.Header;
+                PacketTableD PacketRow = new PacketTableD( p.PacketID+"" , p.time+"", p.SourceIP, p.destinationIP, p.Protocol, p.length+"");
                 System.out.println(RT);
 
                 Platform.runLater(new Runnable() {
@@ -99,7 +126,9 @@ public class CapturePacketsController implements Initializable {
                     public void run() {
                         if (!RT.equals("")) {
                             items.add(RT);
+                            data.add(PacketRow);
                             CapList.setItems(items);
+                            PacketTable.setItems(data);
                         }
                     }
                 });
@@ -126,10 +155,9 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
-        packets = new ArrayList(Allpackets);
         System.out.println("Packets Filtered");
         ObservableList<String> fitems = FXCollections.observableArrayList();
-        fitems = items;
+        fitems=items;
         String text = filter.getText();
         System.out.print(text);
         switch (text) {
@@ -150,38 +178,59 @@ public class CapturePacketsController implements Initializable {
             case "Ethernet":
                 fitems = filterProtocol("Ethernet");
                 break;
-            case "ipv4":
-            case "IPv4":
-            case "IP4":
-                fitems = filterProtocol("IP4");
-                break;
-            default:
-                fitems = filterProtocol("");
-                break;
         }
-
-        CapList.getItems().clear();
-        CapList.setItems(fitems);
+            CapList.getItems().clear();
+            CapList.setItems(fitems);
+        
 
     }
 
     public ObservableList<String> filterProtocol(String protocol) {
-
-        Allpackets = new ArrayList(packets);
+        Allpackets=new ArrayList(packets);
         packets.clear();
         ObservableList<String> fitems = FXCollections.observableArrayList();
-        for (int i = 0; i < Allpackets.size(); i++) {
-            if (Allpackets.get(i).getProtocol().equals(protocol) || protocol.equals("")) {
+        for (int i = 0; i <Allpackets.size(); i++) {
+            System.out.print("asd");
+            if (Allpackets.get(i).getProtocol().equals(protocol)) {
                 packets.add(Allpackets.get(i));
                 fitems.add(Allpackets.get(i).Header);
             }
+
         }
         return fitems;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        btnfilter.setDisable(true);
+        
+                        
+       
+        noColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("no"));
+ 
+       
+        timeColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("time"));
+ 
+        
+        sourceColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("source"));
+
+        
+        destColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("dest"));
+
+        
+        protocolColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("protocol")); 
+        
+       
+        lengthColumn.setCellValueFactory(
+                new PropertyValueFactory<PacketTableD, String>("length"));
+        
+        PacketTable.setItems(data);
+        //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
+
         CaptureThread = new Thread() {
             public void run() {
                 int snaplen = 64 * 1024;           // Capture all packets, no trucation  
@@ -199,3 +248,5 @@ public class CapturePacketsController implements Initializable {
 
     }
 }
+
+

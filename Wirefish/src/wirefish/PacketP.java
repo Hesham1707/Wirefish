@@ -24,6 +24,7 @@ import org.jnetpcap.protocol.tcpip.Udp;
 public class PacketP {
 
     static int id = -1;
+    public int PacketID=0;
     PcapPacket packet;
     String Protocol = "";
     String SourceIP = "", destinationIP = "";
@@ -48,6 +49,7 @@ public class PacketP {
     public PacketP(PcapPacket p) {
         this.packet = p;
         this.id++;
+        this.PacketID=this.id;
         //get source ip and destination
 
         if (packet.hasHeader(eh)) {
