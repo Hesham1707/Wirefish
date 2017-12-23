@@ -87,7 +87,7 @@
             </MenuBar>
             <TextField fx:id="filter" layoutX="29.0" layoutY="28.0" prefHeight="23.0" prefWidth="541.0" promptText="ex: udp, tcp, http...." />
             <Button layoutX="583.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleFilter" text="Filter" />
-            <TableView fx:id="PacketTable" layoutX="1.0" layoutY="55.0" prefHeight="225.0" prefWidth="700.0">
+            <TableView fx:id="PacketTable" layoutX="1.0" layoutY="55.0" onMouseClicked="#run" prefHeight="225.0" prefWidth="700.0">
                <columns>
                   <TableColumn fx:id="noColumn" prefWidth="75.0" text="Id" />
                   <TableColumn fx:id="timeColumn" prefWidth="147.0" text="Time" />
