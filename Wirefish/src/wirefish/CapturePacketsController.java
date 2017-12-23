@@ -96,26 +96,29 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     private void run() {
-        try{
-        int id = PacketTable.getSelectionModel().getSelectedIndex();
-        hexatext.setText(packets.get(id).packet.toHexdump());
-        EthTap.setText(packets.get(id).EthDescription);
-        IPv4Tap.setText(packets.get(id).IpV4Description);
-        UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
-        HttpTap.setText(packets.get(id).HttpDescription);
-        }catch(Exception ex){System.out.println("Random error occured, try again");}
+        try {
+            int id = PacketTable.getSelectionModel().getSelectedIndex();
+            hexatext.setText(packets.get(id).packet.toHexdump());
+            EthTap.setText(packets.get(id).EthDescription);
+            IPv4Tap.setText(packets.get(id).IpV4Description);
+            UDPTCPtap.setText(packets.get(id).TcpUdpDescription);
+            HttpTap.setText(packets.get(id).HttpDescription);
+        } catch (Exception ex) {
+            System.out.println("Random error occured, try again");
+        }
 
     }
+
     @FXML
-    private void handleStartButton(){
-        
+    private void handleStartButton() {
+
         filterbtn.setDisable(true);
         startbtn.setDisable(true);
         PacketTable.getItems().clear();
         Allpackets.clear();
         packets.clear();
         start();
-        }
+    }
 
     @FXML
     private void handleStopAction(ActionEvent event) {
@@ -123,6 +126,7 @@ public class CapturePacketsController implements Initializable {
             pcap.close();
             CaptureThread.stop();
             System.out.println("CAPTURE STOPPED");
+            Allpackets = new ArrayList(packets);
             filterbtn.setDisable(false);
             startbtn.setDisable(false);
         } catch (Exception ex) {
@@ -148,8 +152,9 @@ public class CapturePacketsController implements Initializable {
 
     @FXML
     public void handleFilter(ActionEvent e) {
-        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
+        packets = new ArrayList(Allpackets);
         System.out.println("Packets Filtered");
+        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
         FilteredData = data;
         String text = filter.getText();
         System.out.print(text);
@@ -177,6 +182,9 @@ public class CapturePacketsController implements Initializable {
             case "ip4":
                 FilteredData = filterProtocol("Ethernet");
                 break;
+            default:
+                FilteredData = filterProtocol("");
+                break;
         }
         PacketTable.getItems().clear();
         PacketTable.setItems(FilteredData);
@@ -186,17 +194,14 @@ public class CapturePacketsController implements Initializable {
     }
 
     public ObservableList<PacketTableD> filterProtocol(String protocol) {
-        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
+//        FilteredData.clear();
         Allpackets = new ArrayList(packets);
         packets.clear();
+        ObservableList<PacketTableD> FilteredData = FXCollections.observableArrayList();
         for (int i = 0; i < Allpackets.size(); i++) {
-
-            if (Allpackets.get(i).getProtocol().equals(protocol)) {
+            if (Allpackets.get(i).getProtocol().equals(protocol)||protocol.equals("")) {
                 packets.add(Allpackets.get(i));
-                PacketP p = Allpackets.get(i);
-                System.out.println("asd");
-                PacketTableD PacketRow = new PacketTableD(p.PacketID + "", p.time + "", p.SourceIP, p.destinationIP, p.Protocol, p.length + "");
-                FilteredData.add(PacketRow);
+                FilteredData.add(new PacketTableD(  Allpackets.get(i).PacketID + "",   Allpackets.get(i).time + "",   Allpackets.get(i).SourceIP,   Allpackets.get(i).destinationIP,   Allpackets.get(i).Protocol,  Allpackets.get(i).length + ""));
             }
         }
         return FilteredData;
@@ -229,14 +234,15 @@ public class CapturePacketsController implements Initializable {
         //PacketTable.getColumns().addAll(noColumn , timeColumn , sourceColumn , destColumn , protocolColumn ,lengthColumn);
         start();
     }
-    public void start(){
-    if (!Wirefish.LoadMode) {
+
+    public void start() {
+        if (!Wirefish.LoadMode) {
             PacketP.resetPacketsID();
             CaptureThread = new Thread() {
                 public void run() {
-                    int snaplen = 64 * 1024;             
-                    int flags = Pcap.MODE_PROMISCUOUS; 
-                    int timeout = 10 * 1000;           
+                    int snaplen = 64 * 1024;
+                    int flags = Pcap.MODE_PROMISCUOUS;
+                    int timeout = 10 * 1000;
                     StringBuilder errbuf = new StringBuilder();
                     pcap = Pcap.openLive(alldevs.get(index).getName(), snaplen, flags, timeout, errbuf);
                     String ofile = "Pcap-Save-File.pcap";
